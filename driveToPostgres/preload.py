@@ -11,7 +11,7 @@ df.head()
 
 # clean data table name
 file = 'combined Data'
-clean_data_table = file.lower().replace(" ", "") \
+clean_data_table = file.lower().replace(" ", "_") \
                                .replace("?", "") \
                                .replace("-", "_") \
                                .replace(r"/", "_") \
@@ -23,7 +23,7 @@ clean_data_table = file.lower().replace(" ", "") \
 
 # clean headers name
 df.columns = [
-    x.lower().replace(" ", "") \
+    x.lower().replace(" ", "_") \
              .replace("?", "") \
              .replace("-", "_") \
              .replace(r"/", "_") \
@@ -35,9 +35,6 @@ df.columns = [
     for x in df.columns
 ]
 
-# print(df.columns)
-
-
 # mapping 
 replacements = {
     'float64'            : 'decimal',
@@ -48,19 +45,12 @@ replacements = {
 }
 
 col_str = ", ".join("{} {}".format(n, d) for (n, d) in zip(df.columns, df.dtypes.replace(replacements)))
-# print(col_str)
 
 # data connection to db
 conn_string = f"host={host} \
                 dbname='{db_name}' \
                 user='{user}' \
                 password='{password}'"
-
-# try:
-#     conn = psycopg2.connect(conn_string)
-#     print("Connection successful!")
-# except:
-#     print("Connection unsuccessful.")
 
 conn = psycopg2.connect(conn_string)
 print('db connected')
