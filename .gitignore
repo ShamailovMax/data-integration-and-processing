@@ -1,0 +1,4 @@
+venv/
+LICENSE
+driveToPostgres/config.py
+__pycache__/
