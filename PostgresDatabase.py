@@ -2,7 +2,7 @@ import os
 import pandas as pd
 import psycopg2
 
-
+# =============================================================
 class PostgresDatabase:
     def __init__(self, host, database, user, password, schema="public"):
         self.host = host
