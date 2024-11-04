@@ -1,106 +1,150 @@
 import os
-import numpy as np
-import pandas as pd
-import psycopg2
+import pandas as pd 
+import psycopg2 
 
-from config import *
+class DatabaseImporter:
+    def __init__(self, host, database, user, password):
+        self.host = host
+        self.database = database
+        self.user = user
+        self.password = password
+        self.conn = None
+        self.cursor = None
+
+    def connect(self):
+        """Устанавливает соединение с базой данных."""
+        try:
+            self.conn = psycopg2.connect(
+                host=self.host,
+                dbname=self.database,
+                user=self.user,
+                password=self.password
+            )
+            self.cursor = self.conn.cursor()
+            print("Соединение с базой данных установлено.")
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(f"Произошла ошибка при подключении: {error}")
+    
+    def disconnect(self):
+        """Закрывает соединение с базой данных."""
+        if self.conn is not None:
+            self.cursor.close()
+            self.conn.close()
+            print("Соединение закрыто.")
+
+    @staticmethod
+    def clean_name(name):
+        """Очищает имя от недопустимых символов."""
+        return name.lower().replace(" ", "_") \
+                         .replace("?", "") \
+                         .replace("-", "_") \
+                         .replace(r"/", "_") \
+                         .replace("\\", "_") \
+                         .replace("%", "") \
+                         .replace(")", "") \
+                         .replace(r"(", "") \
+                         .replace("$", "")
+
+    def rename_columns(self, df):
+        """Переименовывает столбцы DataFrame."""
+        df.columns = [self.clean_name(col) for col in df.columns]
+        return df
+
+    def create_table(self, table_name, df):
+        """Создает таблицу в базе данных."""
+        replacements = {
+            'float64': 'decimal',
+            'object': 'varchar',
+            'int64': 'int',
+            'datetime64': 'timestamp',
+            'timedelta64[ns]': 'varchar'
+        }
+
+        col_str = ", ".join("{} {}".format(n, d) for (n, d) in zip(df.columns, df.dtypes.replace(replacements)))
+
+        try:
+            # Удаляет старую таблицу, если она существует
+            self.cursor.execute(f"DROP TABLE IF EXISTS {table_name};")
+            # Создает новую таблицу
+            self.cursor.execute(f"CREATE TABLE {table_name} ({col_str});")
+            self.conn.commit()
+            print(f"Таблица {table_name} создана.")
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(f"Произошла ошибка при создании таблицы: {error}")
+            self.conn.rollback()
+
+    def load_data_to_db(self, df, table_name):
+        """Загружает данные из DataFrame в таблицу базы данных."""
+        temp_csv_path = f"{table_name}.csv"
+        df.to_csv(temp_csv_path, encoding='utf-8', header=True, index=False)
+
+        try:
+            with open(temp_csv_path, 'r', encoding='utf-8') as my_file:
+                print("Файл открыт в памяти")
+                
+                # Копирует данные из CSV-файла в таблицу
+                sql_statement = f"""COPY {table_name} FROM STDIN WITH
+                                    CSV
+                                    ENCODING 'UTF8'
+                                    HEADER
+                                    DELIMITER AS ',';"""
+                self.cursor.copy_expert(sql=sql_statement, file=my_file)
+
+            # Предоставляет права на выборку всем пользователям
+            self.cursor.execute(f"GRANT SELECT ON TABLE {table_name} TO PUBLIC;")
+
+            # Фиксирует изменения
+            self.conn.commit()
+
+            # Удаляет временный CSV-файл
+            os.remove(temp_csv_path)
+
+            print(f"Данные загружены в таблицу {table_name} успешно.")
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(f"Произошла ошибка при загрузке данных: {error}")
+            self.conn.rollback()
+
+    def process_data(self, excel_file):
+        """Основная функция обработки данных."""
+        try:
+            # Чтение файла Excel
+            df = pd.read_excel(excel_file)
+            df.head()
+
+            # Переименовывание столбцов
+            df = self.rename_columns(df)
+
+            # Очистка имени таблицы
+            table_name = self.clean_name(os.path.splitext(os.path.basename(excel_file))[0])
+
+            # Создание таблицы
+            self.create_table(table_name, df)
+
+            # Загрузка данных в базу данных
+            self.load_data_to_db(df, table_name)
+
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(f"Произошла ошибка: {error}")
+            self.conn.rollback()
 
 
 def main():
-    # Чтение файла Excel
-    df = pd.read_excel('C:\\prog\\wildberries_reviews.xlsx')
-    df.head()
+    # Настройки подключения к базе данных
+    db_importer = DatabaseImporter(
+        host="localhost",
+        database="test_etl",  # Укажите название вашей базы данных
+        user="postgres",      # Укажите вашего пользователя
+        password="1234"   # Укажите пароль
+    )
 
-    # Очистка имени таблицы
-    file = 'wildberries reviews'
-    clean_data_table = file.lower().replace(" ", "_") \
-                                   .replace("?", "") \
-                                   .replace("-", "_") \
-                                   .replace(r"/", "_") \
-                                   .replace("\\", "_") \
-                                   .replace("%", "") \
-                                   .replace(")", "") \
-                                   .replace(r"(", "") \
-                                   .replace("$", "")
+    # Устанавливаем соединение
+    db_importer.connect()
 
-    # Очистка заголовков столбцов
-    df.columns = [
-        x.lower().replace(" ", "_") \
-                 .replace("?", "") \
-                 .replace("-", "_") \
-                 .replace(r"/", "_") \
-                 .replace("\\", "_") \
-                 .replace("%", "") \
-                 .replace(")", "") \
-                 .replace(r"(", "") \
-                 .replace("$", "")
-        for x in df.columns
-    ]
+    # Обрабатываем данные
+    db_importer.process_data('wildberries_reviews.xlsx')
 
-    # Маппинг типов данных
-    replacements = {
-        'float64': 'decimal',
-        'object': 'varchar',
-        'int64': 'int',
-        'datetime64': 'timestamp',
-        'timedelta64[ns]': 'varchar'
-    }
-
-    col_str = ", ".join("{} {}".format(n, d) for (n, d) in zip(df.columns, df.dtypes.replace(replacements)))
-
-    try:
-        # Подключение к базе данных
-        conn = psycopg2.connect(host="localhost",
-                                dbname="",
-                                user="",
-                                password="")
-        
-        print("Соединение с базой данных установлено")
-
-        cursor = conn.cursor()
-
-        # Удаляем таблицу с таким же именем, если она существует
-        cursor.execute(f"DROP TABLE IF EXISTS {clean_data_table};")
-
-        # Создаем новую таблицу
-        cursor.execute(f"CREATE TABLE {clean_data_table} ({col_str});")
-
-        # Сохраняем DataFrame в CSV-файл с указанием кодировки UTF-8
-        temp_csv_path = f"{clean_data_table}.csv"
-        df.to_csv(temp_csv_path, encoding='utf-8', header=True, index=False)
-
-        # Открываем файл для копирования в базу данных с той же кодировкой
-        with open(temp_csv_path, 'r', encoding='utf-8') as my_file:
-            print("Файл открыт в памяти")
-            
-            # Копируем данные из CSV-файла в таблицу
-            sql_statement = f"""COPY {clean_data_table} FROM STDIN WITH
-                                CSV
-                                ENCODING 'UTF8'
-                                HEADER
-                                DELIMITER AS ',';"""
-            cursor.copy_expert(sql=sql_statement, file=my_file)
-
-        # Предоставляем права на выборку всем пользователям
-        cursor.execute(f"GRANT SELECT ON TABLE {clean_data_table} TO PUBLIC;")
-
-        # Фиксируем изменения
-        conn.commit()
-
-        # Закрытие соединения
-        cursor.close()
-        conn.close()
-
-        # Удаляем временный CSV-файл
-        os.remove(temp_csv_path)
-
-        print(f"Таблица {clean_data_table} импортирована в базу данных успешно")
-
-    except (Exception, psycopg2.DatabaseError) as error:
-        print(f"Произошла ошибка: {error}")
-        if conn is not None:
-            conn.rollback()
-            conn.close()
+    # Закрываем соединение
+    db_importer.disconnect()
 
 
 if __name__ == "__main__":
