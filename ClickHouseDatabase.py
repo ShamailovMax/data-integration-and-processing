@@ -31,15 +31,27 @@ class ClickHouseDatabase:
 
     @staticmethod
     def get_clickhouse_types(df):
-        """Сопоставляет типы данных Pandas с типами ClickHouse."""
+        """Сопоставляет типы данных Pandas с типами ClickHouse, включая поддержку Nullable для разных типов."""
         dtype_mapping = {
-            'float64': 'Float64',
-            'object': 'String',
-            'int64': 'Int64',
-            'datetime64[ns]': 'DateTime',
-            'timedelta64[ns]': 'String'
+            'float64': 'Nullable(Float64)',
+            'float32': 'Nullable(Float32)',
+            'object': 'Nullable(String)',
+            'int64': 'Nullable(Int64)',
+            'int32': 'Nullable(Int32)',
+            'int16': 'Nullable(Int16)',
+            'int8': 'Nullable(Int8)',
+            'uint64': 'Nullable(UInt64)',
+            'uint32': 'Nullable(UInt32)',
+            'uint16': 'Nullable(UInt16)',
+            'uint8': 'Nullable(UInt8)',
+            'bool': 'Nullable(UInt8)',  # Булевы значения, как правило, хранятся в виде UInt8 (0 или 1)
+            'datetime64[ns]': 'Nullable(DateTime)',
+            'datetime64[ns, UTC]': 'Nullable(DateTime)',
+            'timedelta64[ns]': 'Nullable(String)',  # Преобразование для временных интервалов
+            'category': 'Nullable(String)',  # Категории можно преобразовать в строки
         }
-        return [dtype_mapping.get(str(dtype), 'String') for dtype in df.dtypes]
+        return [dtype_mapping.get(str(dtype), 'Nullable(String)') for dtype in df.dtypes]
+
 
     def create_table(self, table_name, df, engine="MergeTree", engine_params=None):
         """Создает таблицу в ClickHouse."""

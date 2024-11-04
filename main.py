@@ -38,10 +38,10 @@ def main():
     ch_db.transfer_from_postgres(
         postgres_db=pg_db,
         pg_table="test_t",
-        ch_table="clickhouse_reviews",
+        ch_table="clickhouse_reviews_re",
         column_mapping=column_mapping_1,
         engine="MergeTree",
-        engine_params="'/clickhouse/tables/{shard}/clickhouse_reviews', '{replica}'"
+        engine_params="'/clickhouse/tables/{shard}/clickhouse_reviews_re', '{replica}'"
     )
 
     # Отключение от баз данных
