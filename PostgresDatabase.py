@@ -2,6 +2,7 @@ import os
 import pandas as pd
 import psycopg2
 
+
 class PostgresDatabase:
     def __init__(self, host, database, user, password):
         self.host = host
@@ -44,6 +45,7 @@ class PostgresDatabase:
             'timedelta64[ns]': 'varchar'
         }
         col_str = ", ".join(f"{n} {d}" for n, d in zip(df.columns, df.dtypes.replace(replacements)))
+        
         try:
             self.cursor.execute(f"DROP TABLE IF EXISTS {table_name};")
             self.cursor.execute(f"CREATE TABLE {table_name} ({col_str});")
@@ -57,6 +59,7 @@ class PostgresDatabase:
         """Загружает данные из DataFrame в PostgreSQL."""
         temp_csv_path = f"{table_name}.csv"
         df.to_csv(temp_csv_path, encoding='utf-8', header=True, index=False)
+        
         try:
             with open(temp_csv_path, 'r', encoding='utf-8') as my_file:
                 sql_statement = f"""COPY {table_name} FROM STDIN WITH
@@ -78,8 +81,16 @@ class PostgresDatabase:
     @staticmethod
     def clean_name(name):
         """Очищает имя от недопустимых символов."""
-        return name.lower().replace(" ", "_").replace("?", "").replace("-", "_").replace(r"/", "_") \
-            .replace("\\", "_").replace("%", "").replace(")", "").replace(r"(", "").replace("$", "")
+        return name.lower() \
+                   .replace(" ", "_") \
+                   .replace("?", "") \
+                   .replace("-", "_") \
+                   .replace(r"/", "_") \
+                   .replace("\\", "_") \
+                   .replace("%", "") \
+                   .replace(")", "") \
+                   .replace(r"(", "") \
+                   .replace("$", "") \
 
     def rename_columns(self, df, column_mapping):
         """Переименовывает столбцы DataFrame согласно переданному словарю."""
@@ -99,6 +110,3 @@ class PostgresDatabase:
         except (Exception, psycopg2.DatabaseError) as error:
             print(f"Ошибка при обработке данных: {error}")
             self.conn.rollback()
-
-
-
