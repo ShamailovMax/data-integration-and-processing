@@ -3,7 +3,6 @@ import pandas as pd
 import psycopg2
 
 
-
 class DatabaseImporter:
     def __init__(self, host, database, user, password):
         self.host = host
@@ -49,8 +48,18 @@ class DatabaseImporter:
 
     def rename_columns(self, df, column_mapping):
         """Переименовывает столбцы DataFrame согласно переданному словарю."""
+        # Очистка имен столбцов DataFrame
+        df.columns = [self.clean_name(col) for col in df.columns]
+        
+        # Очистка и переименование колонок
         cleaned_column_mapping = {self.clean_name(key): value for key, value in column_mapping.items()}
         df = df.rename(columns=cleaned_column_mapping)
+        
+        # Проверка наличия всех колонок в DataFrame после переименования
+        missing_columns = [col for col in cleaned_column_mapping if col not in df.columns]
+        if missing_columns:
+            print(f"Предупреждение: отсутствуют колонки в DataFrame: {missing_columns}")
+        
         return df
 
     def create_table(self, table_name, df):
@@ -99,13 +108,13 @@ class DatabaseImporter:
             # Фиксирует изменения
             self.conn.commit()
 
-            # Удаляет временный CSV-файл
-            os.remove(temp_csv_path)
-
-            print(f"Данные загружены в таблицу {table_name} успешно.")
         except (Exception, psycopg2.DatabaseError) as error:
             print(f"Произошла ошибка при загрузке данных: {error}")
             self.conn.rollback()
+        finally:
+            # Удаляет временный CSV-файл
+            if os.path.exists(temp_csv_path):
+                os.remove(temp_csv_path)
 
     def process_data(self, data_source, column_mapping, table_name=None):
         """
@@ -158,7 +167,7 @@ def main():
 
     # Пример использования с файлом Excel
     column_mapping_1 = {
-        "Автор": "autor",
+        "Автор": "autorrr",
         "Дата": "data",
         "Отзыв": "otziv",
         "Продукт": "produkt",
@@ -168,7 +177,7 @@ def main():
     db_importer.process_data(
         'wildberries_reviews.xlsx',
         column_mapping_1,
-        table_name="reviews_table"  # Укажите новое имя таблицы, если нужно
+        table_name="test"  # Укажите новое имя таблицы, если нужно
     )
 
     # Закрываем соединение
