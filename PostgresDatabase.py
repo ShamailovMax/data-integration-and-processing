@@ -1,6 +1,8 @@
 import os
 import pandas as pd
 import psycopg2
+from psycopg2 import sql
+from psycopg2.extras import execute_values
 
 # =============================================================
 class PostgresDatabase:
@@ -44,10 +46,16 @@ class PostgresDatabase:
             'float64': 'decimal',
             'object': 'varchar',
             'int64': 'int',
+            'int32': 'int',
+            'int16': 'smallint',
+            'bool': 'boolean',
             'datetime64[ns]': 'timestamp',
-            'timedelta64[ns]': 'varchar'
+            'timedelta64[ns]': 'varchar',
+            'string': 'varchar'  # Исправление типа данных
         }
-        col_str = ", ".join(f"{n} {d}" for n, d in zip(df.columns, df.dtypes.replace(replacements)))
+        # Замена типов данных на соответствующие PostgreSQL
+        col_str = ", ".join(f"{col} {replacements.get(str(dtype), 'varchar')}" 
+                            for col, dtype in zip(df.columns, df.dtypes))
         full_table_name = f"{self.schema}.{table_name}"  # Указание схемы в имени таблицы
         
         try:
@@ -95,7 +103,7 @@ class PostgresDatabase:
                    .replace("%", "") \
                    .replace(")", "") \
                    .replace(r"(", "") \
-                   .replace("$", "") \
+                   .replace("$", "")
 
     def rename_columns(self, df, column_mapping):
         """Переименовывает столбцы DataFrame согласно переданному словарю."""
@@ -114,4 +122,25 @@ class PostgresDatabase:
             self.load_data_to_db(df, table_name)
         except (Exception, psycopg2.DatabaseError) as error:
             print(f"Ошибка при обработке данных: {error}")
+            self.conn.rollback()
+
+    def transfer_from_clickhouse(self, clickhouse_db, ch_table, pg_table, column_mapping=None):
+        """Копирует данные из ClickHouse в PostgreSQL с переименованием колонок."""
+        try:
+            # Запрос данных из ClickHouse
+            query = f"SELECT * FROM {ch_table};"
+            df = clickhouse_db.client.query_df(query)
+            print(f"Данные из таблицы {ch_table} успешно получены из ClickHouse.")
+
+            # Переименование колонок, если задано сопоставление
+            if column_mapping:
+                df = self.rename_columns(df, column_mapping)
+            
+            # Создание таблицы в PostgreSQL и загрузка данных
+            self.create_table(pg_table, df)
+            self.load_data_to_db(df, pg_table)
+            print(f"Данные успешно перенесены из ClickHouse в PostgreSQL.")
+        
+        except Exception as error:
+            print(f"Ошибка при копировании данных из ClickHouse в PostgreSQL: {error}")
             self.conn.rollback()
