@@ -1,8 +1,19 @@
+import logging
 import os
 import pandas as pd
 import psycopg2
 from psycopg2 import sql
 from psycopg2.extras import execute_values
+
+# Настройка логирования
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler("postgres_operations.log"),
+        logging.StreamHandler()
+    ]
+)
 
 class PostgresDatabase:
     def __init__(self, host, database, user, password, schema="public"):
@@ -12,6 +23,7 @@ class PostgresDatabase:
         self.password = password
         self.schema = schema
         self.conn = None
+        self.logger = logging.getLogger(self.__class__.__name__)  # Создаем логгер для класса
 
     def connect(self):
         """Подключается к PostgreSQL."""
@@ -24,16 +36,16 @@ class PostgresDatabase:
             )
             with self.conn.cursor() as cursor:
                 cursor.execute(f"SET search_path TO {self.schema};")
-            print("Соединение с PostgreSQL установлено.")
+            self.logger.info("Соединение с PostgreSQL установлено.")
         except (Exception, psycopg2.DatabaseError) as error:
-            print(f"Ошибка подключения к PostgreSQL: {error}")
+            self.logger.error(f"Ошибка подключения к PostgreSQL: {error}")
             self.conn = None
 
     def disconnect(self):
         """Отключается от PostgreSQL."""
         if self.conn:
             self.conn.close()
-            print("Соединение с PostgreSQL закрыто.")
+            self.logger.info("Соединение с PostgreSQL закрыто.")
 
     def create_table(self, table_name, df):
         """Создает таблицу в PostgreSQL в указанной схеме."""
@@ -57,9 +69,9 @@ class PostgresDatabase:
                 cursor.execute(f"DROP TABLE IF EXISTS {full_table_name};")
                 cursor.execute(f"CREATE TABLE {full_table_name} ({col_str});")
                 self.conn.commit()
-            print(f"Таблица {full_table_name} создана в PostgreSQL.")
+            self.logger.info(f"Таблица {full_table_name} создана в PostgreSQL.")
         except (Exception, psycopg2.DatabaseError) as error:
-            print(f"Ошибка при создании таблицы: {error}")
+            self.logger.error(f"Ошибка при создании таблицы: {error}")
             self.conn.rollback()
 
     def load_data_to_db(self, df, table_name):
@@ -79,13 +91,14 @@ class PostgresDatabase:
                     cursor.copy_expert(sql=sql_statement, file=my_file)
                     cursor.execute(f"GRANT SELECT ON TABLE {full_table_name} TO PUBLIC;")
                     self.conn.commit()
-            print(f"Данные загружены в таблицу {full_table_name} в PostgreSQL.")
+            self.logger.info(f"Данные загружены в таблицу {full_table_name} в PostgreSQL.")
         except (Exception, psycopg2.DatabaseError) as error:
-            print(f"Ошибка при загрузке данных: {error}")
+            self.logger.error(f"Ошибка при загрузке данных: {error}")
             self.conn.rollback()
         finally:
             if os.path.exists(temp_csv_path):
                 os.remove(temp_csv_path)
+                self.logger.info(f"Временный CSV файл {temp_csv_path} удален.")
 
     @staticmethod
     def clean_name(name):
@@ -105,19 +118,22 @@ class PostgresDatabase:
         """Переименовывает столбцы DataFrame согласно переданному словарю."""
         df.columns = [self.clean_name(col) for col in df.columns]
         cleaned_column_mapping = {self.clean_name(key): value for key, value in column_mapping.items()}
+        self.logger.info(f"Столбцы переименованы согласно column_mapping: {column_mapping}")
         return df.rename(columns=cleaned_column_mapping)
 
     def process_data(self, data_source, column_mapping=None, table_name=None):
         """Обрабатывает и загружает данные из Excel в PostgreSQL."""
         try:
             df = pd.read_excel(data_source) if isinstance(data_source, str) else data_source
+            self.logger.info("Данные успешно загружены из источника.")
             df = self.rename_columns(df, column_mapping)
             if table_name is None and isinstance(data_source, str):
                 table_name = self.clean_name(os.path.splitext(os.path.basename(data_source))[0])
             self.create_table(table_name, df)
             self.load_data_to_db(df, table_name)
+            self.logger.info(f"Данные из источника {data_source} загружены в таблицу {table_name} в PostgreSQL.")
         except (Exception, psycopg2.DatabaseError) as error:
-            print(f"Ошибка при обработке данных: {error}")
+            self.logger.error(f"Ошибка при обработке данных: {error}")
             self.conn.rollback()
 
     def transfer_from_clickhouse(self, clickhouse_db, ch_table, pg_table, column_mapping=None):
@@ -126,7 +142,7 @@ class PostgresDatabase:
             # Запрос данных из ClickHouse
             query = f"SELECT * FROM {ch_table};"
             df = clickhouse_db.client.query_df(query)
-            print(f"Данные из таблицы {ch_table} успешно получены из ClickHouse.")
+            self.logger.info(f"Данные из таблицы {ch_table} успешно получены из ClickHouse.")
 
             # Переименование колонок, если задано сопоставление
             if column_mapping:
@@ -135,8 +151,8 @@ class PostgresDatabase:
             # Создание таблицы в PostgreSQL и загрузка данных
             self.create_table(pg_table, df)
             self.load_data_to_db(df, pg_table)
-            print(f"Данные успешно перенесены из ClickHouse в PostgreSQL.")
+            self.logger.info(f"Данные успешно перенесены из ClickHouse в PostgreSQL в таблицу {pg_table}.")
         
         except Exception as error:
-            print(f"Ошибка при копировании данных из ClickHouse в PostgreSQL: {error}")
+            self.logger.error(f"Ошибка при копировании данных из ClickHouse в PostgreSQL: {error}")
             self.conn.rollback()

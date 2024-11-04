@@ -1,0 +1,13 @@
+2024-11-05 00:57:31,081 - ETLManager - INFO - Попытка подключения к PostgreSQL.
+2024-11-05 00:57:35,156 - PostgresDatabase - ERROR - Ошибка подключения к PostgreSQL: connection to server at "localhost" (::1), port 5432 failed: Connection refused (0x0000274D/10061)
+	Is the server running on that host and accepting TCP/IP connections?
+connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused (0x0000274D/10061)
+	Is the server running on that host and accepting TCP/IP connections?
+
+2024-11-05 00:57:35,156 - ETLManager - INFO - Попытка подключения к ClickHouse.
+2024-11-05 00:57:39,225 - urllib3.connectionpool - WARNING - Retrying (Retry(total=0, connect=None, read=None, redirect=0, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000002C57FD5BC20>: Failed to establish a new connection: [WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение')': /?
+2024-11-05 00:57:43,308 - clickhouse_connect.driver.httpclient - WARNING - Unexpected Http Driver Exception
+2024-11-05 00:57:43,309 - ClickHouseDatabase - ERROR - Ошибка подключения к ClickHouse: Error HTTPConnectionPool(host='localhost', port=8123): Max retries exceeded with url: /? (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000002C577075F70>: Failed to establish a new connection: [WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение')) executing HTTP request attempt 1 (http://localhost:8123)
+2024-11-05 01:04:23,287 - ETLManager - INFO - Пользователь выбрал действие: 4
+2024-11-05 01:04:23,288 - ETLManager - INFO - Завершение программы.
+2024-11-05 01:04:23,288 - ETLManager - INFO - Закрытие соединений с базами данных.
