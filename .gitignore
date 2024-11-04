@@ -1,7 +1,6 @@
 venv/
 LICENSE
 driveToPostgres/config.py
-__pycache__/
 *.xlsx
 *.xls
 *.csv

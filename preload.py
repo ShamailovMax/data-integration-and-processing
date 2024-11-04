@@ -1,6 +1,8 @@
 import os
-import pandas as pd 
-import psycopg2 
+import pandas as pd
+import psycopg2
+
+
 
 class DatabaseImporter:
     def __init__(self, host, database, user, password):
@@ -45,9 +47,10 @@ class DatabaseImporter:
                          .replace(r"(", "") \
                          .replace("$", "")
 
-    def rename_columns(self, df):
-        """Переименовывает столбцы DataFrame."""
-        df.columns = [self.clean_name(col) for col in df.columns]
+    def rename_columns(self, df, column_mapping):
+        """Переименовывает столбцы DataFrame согласно переданному словарю."""
+        cleaned_column_mapping = {self.clean_name(key): value for key, value in column_mapping.items()}
+        df = df.rename(columns=cleaned_column_mapping)
         return df
 
     def create_table(self, table_name, df):
@@ -104,18 +107,31 @@ class DatabaseImporter:
             print(f"Произошла ошибка при загрузке данных: {error}")
             self.conn.rollback()
 
-    def process_data(self, excel_file):
-        """Основная функция обработки данных."""
+    def process_data(self, data_source, column_mapping, table_name=None):
+        """
+        Основная функция обработки данных.
+        :param data_source: Путь к файлу Excel или другой источник данных.
+        :param column_mapping: Словарь для переименования колонок.
+        :param table_name: Имя таблицы для создания/обновления.
+        """
         try:
-            # Чтение файла Excel
-            df = pd.read_excel(excel_file)
-            df.head()
+            # Чтение данных из источника
+            if isinstance(data_source, str):  # Предполагаем, что это путь к файлу Excel
+                df = pd.read_excel(data_source)
+            elif isinstance(data_source, pd.DataFrame):  # Уже готовый DataFrame
+                df = data_source
+            else:
+                raise ValueError("Неверный тип данных для параметра data_source.")
 
             # Переименовывание столбцов
-            df = self.rename_columns(df)
+            df = self.rename_columns(df, column_mapping)
 
             # Очистка имени таблицы
-            table_name = self.clean_name(os.path.splitext(os.path.basename(excel_file))[0])
+            if table_name is None:
+                if isinstance(data_source, str):
+                    table_name = self.clean_name(os.path.splitext(os.path.basename(data_source))[0])
+                else:
+                    raise ValueError("Не удалось определить имя таблицы. Пожалуйста, укажите его явно.")
 
             # Создание таблицы
             self.create_table(table_name, df)
@@ -134,14 +150,26 @@ def main():
         host="localhost",
         database="test_etl",  # Укажите название вашей базы данных
         user="postgres",      # Укажите вашего пользователя
-        password="1234"   # Укажите пароль
+        password=""   # Укажите пароль
     )
 
     # Устанавливаем соединение
     db_importer.connect()
 
-    # Обрабатываем данные
-    db_importer.process_data('wildberries_reviews.xlsx')
+    # Пример использования с файлом Excel
+    column_mapping_1 = {
+        "Автор": "autor",
+        "Дата": "data",
+        "Отзыв": "otziv",
+        "Продукт": "produkt",
+        "Артикул": "arikul",
+        # Добавьте остальные колонки здесь...
+    }
+    db_importer.process_data(
+        'wildberries_reviews.xlsx',
+        column_mapping_1,
+        table_name="reviews_table"  # Укажите новое имя таблицы, если нужно
+    )
 
     # Закрываем соединение
     db_importer.disconnect()
@@ -149,3 +177,37 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+
+
+
+
+
+
+
+
+
+        # host="localhost",
+        # database="test_etl",  # Укажите название вашей базы данных
+        # user="postgres",      # Укажите вашего пользователя
+        # password=""   # Укажите пароль
+
+
+
+    # Пример использования с другим источником данных (например, DataFrame)
+    # df = pd.DataFrame({
+    #     'A': [1, 2, 3],
+    #     'B': ['a', 'b', 'c']
+    # })
+    # column_mapping_2 = {
+    #     "Column_A": "A",
+    #     "Column_B": "B"
+    # }
+    # db_importer.process_data(
+    #     df,
+    #     column_mapping_2,
+    #     table_name="another_table"
+    # )
+
+    # Закрываем соединение
