@@ -1,6 +1,7 @@
 import pandas as pd
 import clickhouse_connect
 
+
 class ClickHouseDatabase:
     def __init__(self, host, port, user, password):
         self.host = host
