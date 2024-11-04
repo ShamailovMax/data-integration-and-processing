@@ -82,17 +82,23 @@ class ClickHouseDatabase:
         """Копирует данные из PostgreSQL в ClickHouse с переименованием колонок."""
         query = f"SELECT * FROM {pg_table};"
         try:
-            with postgres_db.cursor() as cursor:
+            # Создание курсора через соединение postgres_db.conn
+            with postgres_db.conn.cursor() as cursor:
                 cursor.execute(query)
                 colnames = [desc[0] for desc in cursor.description]
                 rows = cursor.fetchall()
                 df = pd.DataFrame(rows, columns=colnames)
+
+                # Переименование колонок, если указано
                 if column_mapping:
                     df.rename(columns=column_mapping, inplace=True)
+
+                # Создание таблицы и загрузка данных в ClickHouse
                 self.create_table(ch_table, df, engine, engine_params)
                 self.load_data(ch_table, df)
         except Exception as error:
             print(f"Ошибка при копировании данных из PostgreSQL в ClickHouse: {error}")
+
 
     def transfer_to_postgres(self, postgres_db, ch_table, pg_table, column_mapping=None):
         """

@@ -24,13 +24,13 @@ class ETLManager:
 
         # Настройка переименования колонок
         self.column_mapping = {
-            "author": "автор",
-            "date": "дата",
-            "review": "отзыв",
-            "product": "продукт",
-            "article": "артикул"
+            "автор": "author",
+            "дата": "date",
+            "отзыв": "review",
+            "продукт": "product",
+            "артикул": "article"
         }
-
+# автор, дата, отзыв, продукт, артикул
     def load_data_from_xlsx_to_postgres(self):
         """Загрузка данных из файла xlsx в PostgreSQL."""
         self.pg_db.process_data(
@@ -43,8 +43,8 @@ class ETLManager:
         """Перенос данных из ClickHouse в PostgreSQL."""
         self.pg_db.transfer_from_clickhouse(
             clickhouse_db=self.ch_db,
-            ch_table="mydb",
-            pg_table="clickhouse_reviews_mydb",
+            ch_table="test_t_re_ch",
+            pg_table="test_t_re_ch",
             column_mapping=self.column_mapping
         )
 
@@ -55,7 +55,8 @@ class ETLManager:
             pg_table="test_t_re",
             ch_table="test_t_re_ch",
             engine="MergeTree",
-            engine_params="'/clickhouse/tables/{shard}/test_t_re_ch', '{replica}'"
+            engine_params="'/clickhouse/tables/{shard}/test_t_re_ch', '{replica}'",
+            column_mapping=self.column_mapping
         )
 
     def show_menu(self):

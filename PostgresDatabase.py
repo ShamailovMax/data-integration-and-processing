@@ -4,16 +4,14 @@ import psycopg2
 from psycopg2 import sql
 from psycopg2.extras import execute_values
 
-# =============================================================
 class PostgresDatabase:
     def __init__(self, host, database, user, password, schema="public"):
         self.host = host
         self.database = database
         self.user = user
         self.password = password
-        self.schema = schema  # Новый параметр для схемы
+        self.schema = schema
         self.conn = None
-        self.cursor = None
 
     def connect(self):
         """Подключается к PostgreSQL."""
@@ -24,19 +22,16 @@ class PostgresDatabase:
                 user=self.user,
                 password=self.password
             )
-            self.cursor = self.conn.cursor()
-            # Устанавливаем схему по умолчанию для подключения
-            self.cursor.execute(f"SET search_path TO {self.schema};")
+            with self.conn.cursor() as cursor:
+                cursor.execute(f"SET search_path TO {self.schema};")
             print("Соединение с PostgreSQL установлено.")
         except (Exception, psycopg2.DatabaseError) as error:
             print(f"Ошибка подключения к PostgreSQL: {error}")
             self.conn = None
-            self.cursor = None
 
     def disconnect(self):
         """Отключается от PostgreSQL."""
         if self.conn:
-            self.cursor.close()
             self.conn.close()
             print("Соединение с PostgreSQL закрыто.")
 
@@ -51,17 +46,17 @@ class PostgresDatabase:
             'bool': 'boolean',
             'datetime64[ns]': 'timestamp',
             'timedelta64[ns]': 'varchar',
-            'string': 'varchar'  # Исправление типа данных
+            'string': 'varchar'
         }
-        # Замена типов данных на соответствующие PostgreSQL
         col_str = ", ".join(f"{col} {replacements.get(str(dtype), 'varchar')}" 
                             for col, dtype in zip(df.columns, df.dtypes))
-        full_table_name = f"{self.schema}.{table_name}"  # Указание схемы в имени таблицы
+        full_table_name = f"{self.schema}.{table_name}"
         
         try:
-            self.cursor.execute(f"DROP TABLE IF EXISTS {full_table_name};")
-            self.cursor.execute(f"CREATE TABLE {full_table_name} ({col_str});")
-            self.conn.commit()
+            with self.conn.cursor() as cursor:
+                cursor.execute(f"DROP TABLE IF EXISTS {full_table_name};")
+                cursor.execute(f"CREATE TABLE {full_table_name} ({col_str});")
+                self.conn.commit()
             print(f"Таблица {full_table_name} создана в PostgreSQL.")
         except (Exception, psycopg2.DatabaseError) as error:
             print(f"Ошибка при создании таблицы: {error}")
@@ -70,19 +65,20 @@ class PostgresDatabase:
     def load_data_to_db(self, df, table_name):
         """Загружает данные из DataFrame в PostgreSQL."""
         temp_csv_path = f"{table_name}.csv"
-        full_table_name = f"{self.schema}.{table_name}"  # Указание схемы в имени таблицы
+        full_table_name = f"{self.schema}.{table_name}"
         df.to_csv(temp_csv_path, encoding='utf-8', header=True, index=False)
         
         try:
             with open(temp_csv_path, 'r', encoding='utf-8') as my_file:
-                sql_statement = f"""COPY {full_table_name} FROM STDIN WITH
-                                    CSV
-                                    ENCODING 'UTF8'
-                                    HEADER
-                                    DELIMITER AS ',';"""
-                self.cursor.copy_expert(sql=sql_statement, file=my_file)
-            self.cursor.execute(f"GRANT SELECT ON TABLE {full_table_name} TO PUBLIC;")
-            self.conn.commit()
+                with self.conn.cursor() as cursor:
+                    sql_statement = f"""COPY {full_table_name} FROM STDIN WITH
+                                        CSV
+                                        ENCODING 'UTF8'
+                                        HEADER
+                                        DELIMITER AS ',';"""
+                    cursor.copy_expert(sql=sql_statement, file=my_file)
+                    cursor.execute(f"GRANT SELECT ON TABLE {full_table_name} TO PUBLIC;")
+                    self.conn.commit()
             print(f"Данные загружены в таблицу {full_table_name} в PostgreSQL.")
         except (Exception, psycopg2.DatabaseError) as error:
             print(f"Ошибка при загрузке данных: {error}")
