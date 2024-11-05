@@ -6,3 +6,4 @@ driveToPostgres/config.py
 *.xls
 *.csv
 *.log
+tests/__pycache__
