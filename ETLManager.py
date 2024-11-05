@@ -32,7 +32,8 @@ class ETLManager:
             host="localhost",
             port=8123,
             user="default",
-            password=""
+            password="",
+            schema="test_schema"  # Указываем схему для ClickHouse
         )
         self.logger.info("Попытка подключения к ClickHouse.")
         self.ch_db.connect()
@@ -69,7 +70,7 @@ class ETLManager:
             
             self.pg_db.transfer_from_clickhouse(
                 clickhouse_db=self.ch_db,
-                ch_table="test_t_re_ch",
+                ch_table="test_schema.test_t_re_ch",  # Указываем полное имя таблицы с учетом схемы
                 pg_table="test_t_re_ch",
                 column_mapping=self.column_mapping
             )
@@ -90,7 +91,7 @@ class ETLManager:
                 pg_table="test_t_re",
                 ch_table="test_t_re_ch",
                 engine="MergeTree",
-                engine_params="'/clickhouse/tables/{shard}/test_t_re_ch', '{replica}'",
+                engine_params="'/clickhouse/tables/{shard}/test_schema.test_t_re_ch', '{replica}'",  # Полное имя таблицы
                 column_mapping=self.column_mapping
             )
             self.logger.info("Данные успешно перенесены из PostgreSQL в ClickHouse.")
