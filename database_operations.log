@@ -1,36 +1,45 @@
-2024-11-05 02:40:05,658 - ETLManager - INFO -    PostgreSQL.
-2024-11-05 02:40:05,699 - PostgresDatabase - INFO -   PostgreSQL .
-2024-11-05 02:40:05,699 - ETLManager - INFO -    ClickHouse.
-2024-11-05 02:40:05,835 - ClickHouseDatabase - INFO -   ClickHouse .
-2024-11-05 02:40:05,913 - ClickHouseDatabase - INFO -  test_schema  .
-2024-11-05 02:40:09,417 - ETLManager - INFO -   : 3
-2024-11-05 02:40:09,419 - ETLManager - INFO -     PostgreSQL  ClickHouse.
-2024-11-05 02:40:09,435 - ClickHouseDatabase - INFO -    test_t_re   PostgreSQL.
-2024-11-05 02:40:09,438 - ClickHouseDatabase - INFO -    column_mapping: {'': 'author', '': 'date', '': 'review', '': 'product', '': 'article'}
-2024-11-05 02:40:09,495 - ClickHouseDatabase - INFO -  test_schema.test_t_re_ch   ClickHouse.
-2024-11-05 02:40:09,610 - ClickHouseDatabase - INFO -      test_schema.test_t_re_ch  ClickHouse.
-2024-11-05 02:40:09,611 - ClickHouseDatabase - INFO -   PostgreSQL    ClickHouse   test_t_re_ch.
-2024-11-05 02:40:09,611 - ETLManager - INFO -     PostgreSQL  ClickHouse.
-2024-11-05 02:41:57,618 - ETLManager - INFO - Пользователь выбрал действие: 2
-2024-11-05 02:41:57,618 - ETLManager - INFO - Начало переноса данных из ClickHouse в PostgreSQL.
-2024-11-05 02:41:57,650 - PostgresDatabase - INFO - Данные из таблицы test_schema.test_t_re_ch успешно получены из ClickHouse.
-2024-11-05 02:41:57,651 - PostgresDatabase - INFO - Столбцы переименованы согласно column_mapping: {'автор': 'author', 'дата': 'date', 'отзыв': 'review', 'продукт': 'product', 'артикул': 'article'}
-2024-11-05 02:41:57,679 - PostgresDatabase - INFO - Таблица public.test_t_re_ch создана в PostgreSQL.
-2024-11-05 02:41:57,765 - PostgresDatabase - INFO - Данные загружены в таблицу public.test_t_re_ch в PostgreSQL.
-2024-11-05 02:41:57,766 - PostgresDatabase - INFO - Временный CSV файл test_t_re_ch.csv удален.
-2024-11-05 02:41:57,766 - PostgresDatabase - INFO - Данные успешно перенесены из ClickHouse в PostgreSQL в таблицу test_t_re_ch.
-2024-11-05 02:41:57,766 - ETLManager - INFO - Данные успешно перенесены из ClickHouse в PostgreSQL.
-2024-11-05 02:42:03,088 - ETLManager - INFO - Пользователь выбрал действие: 1
-2024-11-05 02:42:03,088 - ETLManager - INFO - Начало загрузки данных из XLSX в PostgreSQL.
-2024-11-05 02:42:04,651 - PostgresDatabase - INFO - Данные успешно загружены из источника.
-2024-11-05 02:42:04,652 - PostgresDatabase - INFO - Столбцы переименованы согласно column_mapping: {'автор': 'author', 'дата': 'date', 'отзыв': 'review', 'продукт': 'product', 'артикул': 'article'}
-2024-11-05 02:42:04,673 - PostgresDatabase - INFO - Таблица public.test_t_re создана в PostgreSQL.
-2024-11-05 02:42:04,745 - PostgresDatabase - INFO - Данные загружены в таблицу public.test_t_re в PostgreSQL.
-2024-11-05 02:42:04,746 - PostgresDatabase - INFO - Временный CSV файл test_t_re.csv удален.
-2024-11-05 02:42:04,747 - PostgresDatabase - INFO - Данные из источника wildberries_reviews.xlsx загружены в таблицу test_t_re в PostgreSQL.
-2024-11-05 02:42:04,747 - ETLManager - INFO - Данные из XLSX успешно загружены в PostgreSQL.
-2024-11-05 02:42:08,690 - ETLManager - INFO - Пользователь выбрал действие: 4
-2024-11-05 02:42:08,691 - ETLManager - INFO - Завершение программы.
-2024-11-05 02:42:08,691 - ETLManager - INFO - Закрытие соединений с базами данных.
-2024-11-05 02:42:08,692 - PostgresDatabase - INFO - Соединение с PostgreSQL закрыто.
-2024-11-05 02:42:08,693 - ClickHouseDatabase - INFO - Соединение с ClickHouse закрыто.
+2024-11-05 03:00:34,077 - ETLManager - INFO - Попытка подключения к PostgreSQL.
+2024-11-05 03:00:38,147 - PostgresDatabase - ERROR - Ошибка подключения к PostgreSQL: connection to server at "localhost" (::1), port 5432 failed: Connection refused (0x0000274D/10061)
+	Is the server running on that host and accepting TCP/IP connections?
+connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused (0x0000274D/10061)
+	Is the server running on that host and accepting TCP/IP connections?
+
+2024-11-05 03:00:38,150 - PostgresDatabase - INFO - Вызов функции connect прошел успешно.
+2024-11-05 03:00:38,151 - ETLManager - INFO - Попытка подключения к ClickHouse.
+2024-11-05 03:00:42,216 - urllib3.connectionpool - WARNING - Retrying (Retry(total=0, connect=None, read=None, redirect=0, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001BFAF363F20>: Failed to establish a new connection: [WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение')': /?
+2024-11-05 03:00:46,284 - clickhouse_connect.driver.httpclient - WARNING - Unexpected Http Driver Exception
+2024-11-05 03:00:46,285 - ClickHouseDatabase - ERROR - Ошибка подключения к ClickHouse: Error HTTPConnectionPool(host='localhost', port=8123): Max retries exceeded with url: /? (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001BFAF363F50>: Failed to establish a new connection: [WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение')) executing HTTP request attempt 1 (http://localhost:8123)
+2024-11-05 03:00:46,286 - ClickHouseDatabase - INFO - Вызов функции connect прошел успешно.
+2024-11-05 03:01:15,248 - ETLManager - INFO - Закрытие соединений с базами данных.
+2024-11-05 03:04:21,878 - ETLManager - INFO - Попытка подключения к PostgreSQL.
+2024-11-05 03:04:21,915 - PostgresDatabase - INFO - Соединение с PostgreSQL установлено.
+2024-11-05 03:04:21,915 - PostgresDatabase - INFO - Вызов функции connect прошел успешно.
+2024-11-05 03:04:21,916 - ETLManager - INFO - Попытка подключения к ClickHouse.
+2024-11-05 03:04:22,059 - ClickHouseDatabase - INFO - Соединение с ClickHouse установлено.
+2024-11-05 03:04:22,118 - ClickHouseDatabase - INFO - Схема test_schema уже существует.
+2024-11-05 03:04:22,118 - ClickHouseDatabase - INFO - Вызов функции connect прошел успешно.
+2024-11-05 03:04:34,307 - ETLManager - INFO - Пользователь выбрал действие: 4
+2024-11-05 03:04:34,308 - ETLManager - INFO - Завершение программы.
+2024-11-05 03:04:34,310 - ETLManager - INFO - Закрытие соединений с базами данных.
+2024-11-05 03:04:34,310 - PostgresDatabase - INFO - Соединение с PostgreSQL закрыто.
+2024-11-05 03:04:34,311 - ClickHouseDatabase - INFO - Соединение с ClickHouse закрыто.
+2024-11-05 03:07:01,888 - ETLManager - INFO - Попытка подключения к PostgreSQL.
+2024-11-05 03:07:01,924 - PostgresDatabase - INFO - Соединение с PostgreSQL установлено.
+2024-11-05 03:07:01,924 - PostgresDatabase - INFO - Вызов функции connect прошел успешно.
+2024-11-05 03:07:01,925 - ETLManager - INFO - Попытка подключения к ClickHouse.
+2024-11-05 03:07:02,069 - ClickHouseDatabase - INFO - Соединение с ClickHouse установлено.
+2024-11-05 03:07:02,129 - ClickHouseDatabase - INFO - Схема test_schema уже существует.
+2024-11-05 03:07:02,129 - ClickHouseDatabase - INFO - Вызов функции connect прошел успешно.
+2024-11-05 03:07:09,967 - ETLManager - INFO - Пользователь выбрал действие: 3
+2024-11-05 03:07:09,967 - ETLManager - INFO - Начало переноса данных из PostgreSQL в ClickHouse.
+2024-11-05 03:07:09,975 - ClickHouseDatabase - INFO - Данные из таблицы test_t_re получены из PostgreSQL.
+2024-11-05 03:07:09,976 - ClickHouseDatabase - INFO - Столбцы переименованы согласно column_mapping: {'автор': 'author', 'дата': 'date', 'отзыв': 'review', 'продукт': 'product', 'артикул': 'article'}
+2024-11-05 03:07:10,038 - ClickHouseDatabase - INFO - Таблица test_schema.test_t_re_ch создана в ClickHouse.
+2024-11-05 03:07:10,150 - ClickHouseDatabase - INFO - Данные успешно загружены в таблицу test_schema.test_t_re_ch в ClickHouse.
+2024-11-05 03:07:10,150 - ClickHouseDatabase - INFO - Данные из PostgreSQL успешно загружены в ClickHouse в таблицу test_t_re_ch.
+2024-11-05 03:07:10,151 - ETLManager - INFO - Данные успешно перенесены из PostgreSQL в ClickHouse.
+2024-11-05 03:11:05,410 - ETLManager - INFO - Пользователь выбрал действие: 4
+2024-11-05 03:11:05,411 - ETLManager - INFO - Завершение программы.
+2024-11-05 03:11:05,412 - ETLManager - INFO - Закрытие соединений с базами данных.
+2024-11-05 03:11:05,413 - PostgresDatabase - INFO - Соединение с PostgreSQL закрыто.
+2024-11-05 03:11:05,414 - ClickHouseDatabase - INFO - Соединение с ClickHouse закрыто.

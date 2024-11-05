@@ -5,6 +5,8 @@ import psycopg2
 from psycopg2 import sql
 from psycopg2.extras import execute_values
 
+from decorators import retry
+
 # Настройка логирования
 logging.basicConfig(
     level=logging.INFO,
@@ -25,6 +27,7 @@ class PostgresDatabase:
         self.conn = None
         self.logger = logging.getLogger(self.__class__.__name__)  # Создаем логгер для класса
 
+    @retry(retries=3, delay=5, logger=logging.getLogger(__name__))
     def connect(self):
         """Подключается к PostgreSQL."""
         try:
