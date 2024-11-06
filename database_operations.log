@@ -1,45 +1,43 @@
-2024-11-05 03:00:34,077 - ETLManager - INFO - Попытка подключения к PostgreSQL.
-2024-11-05 03:00:38,147 - PostgresDatabase - ERROR - Ошибка подключения к PostgreSQL: connection to server at "localhost" (::1), port 5432 failed: Connection refused (0x0000274D/10061)
-	Is the server running on that host and accepting TCP/IP connections?
-connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused (0x0000274D/10061)
-	Is the server running on that host and accepting TCP/IP connections?
+2024-11-07 01:32:55,351 - ETLManager - INFO - Попытка подключения к PostgreSQL.
+2024-11-07 01:32:55,413 - PostgresDatabase - ERROR - Ошибка подключения к PostgreSQL: connection to server at "localhost" (::1), port 5432 failed: FATAL:  password authentication failed for user "postgres"
 
-2024-11-05 03:00:38,150 - PostgresDatabase - INFO - Вызов функции connect прошел успешно.
-2024-11-05 03:00:38,151 - ETLManager - INFO - Попытка подключения к ClickHouse.
-2024-11-05 03:00:42,216 - urllib3.connectionpool - WARNING - Retrying (Retry(total=0, connect=None, read=None, redirect=0, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001BFAF363F20>: Failed to establish a new connection: [WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение')': /?
-2024-11-05 03:00:46,284 - clickhouse_connect.driver.httpclient - WARNING - Unexpected Http Driver Exception
-2024-11-05 03:00:46,285 - ClickHouseDatabase - ERROR - Ошибка подключения к ClickHouse: Error HTTPConnectionPool(host='localhost', port=8123): Max retries exceeded with url: /? (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001BFAF363F50>: Failed to establish a new connection: [WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение')) executing HTTP request attempt 1 (http://localhost:8123)
-2024-11-05 03:00:46,286 - ClickHouseDatabase - INFO - Вызов функции connect прошел успешно.
-2024-11-05 03:01:15,248 - ETLManager - INFO - Закрытие соединений с базами данных.
-2024-11-05 03:04:21,878 - ETLManager - INFO - Попытка подключения к PostgreSQL.
-2024-11-05 03:04:21,915 - PostgresDatabase - INFO - Соединение с PostgreSQL установлено.
-2024-11-05 03:04:21,915 - PostgresDatabase - INFO - Вызов функции connect прошел успешно.
-2024-11-05 03:04:21,916 - ETLManager - INFO - Попытка подключения к ClickHouse.
-2024-11-05 03:04:22,059 - ClickHouseDatabase - INFO - Соединение с ClickHouse установлено.
-2024-11-05 03:04:22,118 - ClickHouseDatabase - INFO - Схема test_schema уже существует.
-2024-11-05 03:04:22,118 - ClickHouseDatabase - INFO - Вызов функции connect прошел успешно.
-2024-11-05 03:04:34,307 - ETLManager - INFO - Пользователь выбрал действие: 4
-2024-11-05 03:04:34,308 - ETLManager - INFO - Завершение программы.
-2024-11-05 03:04:34,310 - ETLManager - INFO - Закрытие соединений с базами данных.
-2024-11-05 03:04:34,310 - PostgresDatabase - INFO - Соединение с PostgreSQL закрыто.
-2024-11-05 03:04:34,311 - ClickHouseDatabase - INFO - Соединение с ClickHouse закрыто.
-2024-11-05 03:07:01,888 - ETLManager - INFO - Попытка подключения к PostgreSQL.
-2024-11-05 03:07:01,924 - PostgresDatabase - INFO - Соединение с PostgreSQL установлено.
-2024-11-05 03:07:01,924 - PostgresDatabase - INFO - Вызов функции connect прошел успешно.
-2024-11-05 03:07:01,925 - ETLManager - INFO - Попытка подключения к ClickHouse.
-2024-11-05 03:07:02,069 - ClickHouseDatabase - INFO - Соединение с ClickHouse установлено.
-2024-11-05 03:07:02,129 - ClickHouseDatabase - INFO - Схема test_schema уже существует.
-2024-11-05 03:07:02,129 - ClickHouseDatabase - INFO - Вызов функции connect прошел успешно.
-2024-11-05 03:07:09,967 - ETLManager - INFO - Пользователь выбрал действие: 3
-2024-11-05 03:07:09,967 - ETLManager - INFO - Начало переноса данных из PostgreSQL в ClickHouse.
-2024-11-05 03:07:09,975 - ClickHouseDatabase - INFO - Данные из таблицы test_t_re получены из PostgreSQL.
-2024-11-05 03:07:09,976 - ClickHouseDatabase - INFO - Столбцы переименованы согласно column_mapping: {'автор': 'author', 'дата': 'date', 'отзыв': 'review', 'продукт': 'product', 'артикул': 'article'}
-2024-11-05 03:07:10,038 - ClickHouseDatabase - INFO - Таблица test_schema.test_t_re_ch создана в ClickHouse.
-2024-11-05 03:07:10,150 - ClickHouseDatabase - INFO - Данные успешно загружены в таблицу test_schema.test_t_re_ch в ClickHouse.
-2024-11-05 03:07:10,150 - ClickHouseDatabase - INFO - Данные из PostgreSQL успешно загружены в ClickHouse в таблицу test_t_re_ch.
-2024-11-05 03:07:10,151 - ETLManager - INFO - Данные успешно перенесены из PostgreSQL в ClickHouse.
-2024-11-05 03:11:05,410 - ETLManager - INFO - Пользователь выбрал действие: 4
-2024-11-05 03:11:05,411 - ETLManager - INFO - Завершение программы.
-2024-11-05 03:11:05,412 - ETLManager - INFO - Закрытие соединений с базами данных.
-2024-11-05 03:11:05,413 - PostgresDatabase - INFO - Соединение с PostgreSQL закрыто.
-2024-11-05 03:11:05,414 - ClickHouseDatabase - INFO - Соединение с ClickHouse закрыто.
+2024-11-07 01:32:55,414 - PostgresDatabase - INFO - Вызов функции connect прошел успешно.
+2024-11-07 01:32:55,415 - ETLManager - INFO - Попытка подключения к MySQL.
+2024-11-07 01:32:55,444 - MySQLDatabase - ERROR - Ошибка подключения к MySQL: Unsupported argument 'dbname'
+2024-11-07 01:32:55,445 - MySQLDatabase - INFO - Вызов функции connect прошел успешно.
+2024-11-07 01:32:55,446 - ETLManager - INFO - Попытка подключения к ClickHouse.
+2024-11-07 01:32:55,448 - ClickHouseDatabase - ERROR - Ошибка подключения к ClickHouse: 'latin-1' codec can't encode characters in position 70-75: ordinal not in range(256)
+2024-11-07 01:32:55,449 - ClickHouseDatabase - INFO - Вызов функции connect прошел успешно.
+2024-11-07 01:36:32,300 - ETLManager - INFO - Пользователь выбрал действие: 4
+2024-11-07 01:36:32,300 - ETLManager - INFO - Завершение программы.
+2024-11-07 01:36:32,301 - ETLManager - INFO - Закрытие соединений с базами данных.
+2024-11-07 01:36:36,376 - ETLManager - INFO - Попытка подключения к PostgreSQL.
+2024-11-07 01:36:36,435 - PostgresDatabase - ERROR - Ошибка подключения к PostgreSQL: connection to server at "localhost" (::1), port 5432 failed: FATAL:  password authentication failed for user "postgres"
+
+2024-11-07 01:36:36,437 - PostgresDatabase - INFO - Вызов функции connect прошел успешно.
+2024-11-07 01:36:36,437 - ETLManager - INFO - Попытка подключения к MySQL.
+2024-11-07 01:36:36,612 - MySQLDatabase - INFO - Подключение к MySQL установлено.
+2024-11-07 01:36:36,613 - MySQLDatabase - INFO - Вызов функции connect прошел успешно.
+2024-11-07 01:36:36,613 - ETLManager - INFO - Попытка подключения к ClickHouse.
+2024-11-07 01:36:36,616 - ClickHouseDatabase - ERROR - Ошибка подключения к ClickHouse: 'latin-1' codec can't encode characters in position 70-75: ordinal not in range(256)
+2024-11-07 01:36:36,617 - ClickHouseDatabase - INFO - Вызов функции connect прошел успешно.
+2024-11-07 01:45:40,181 - ETLManager - INFO - Пользователь выбрал действие: 4
+2024-11-07 01:45:40,181 - ETLManager - INFO - Завершение программы.
+2024-11-07 01:45:40,182 - ETLManager - INFO - Закрытие соединений с базами данных.
+2024-11-07 01:45:45,275 - ETLManager - INFO - Попытка подключения к PostgreSQL.
+2024-11-07 01:45:45,322 - PostgresDatabase - ERROR - Ошибка подключения к PostgreSQL: connection to server at "localhost" (::1), port 5432 failed: FATAL:  password authentication failed for user "postgres"
+
+2024-11-07 01:45:45,322 - PostgresDatabase - INFO - Вызов функции connect прошел успешно.
+2024-11-07 01:45:45,322 - ETLManager - INFO - Попытка подключения к MySQL.
+2024-11-07 01:45:45,352 - MySQLDatabase - INFO - Подключение к MySQL установлено.
+2024-11-07 01:45:45,360 - MySQLDatabase - INFO - Вызов функции connect прошел успешно.
+2024-11-07 01:45:45,360 - ETLManager - INFO - Попытка подключения к ClickHouse.
+2024-11-07 01:45:45,360 - ClickHouseDatabase - ERROR - Ошибка подключения к ClickHouse: 'latin-1' codec can't encode characters in position 70-75: ordinal not in range(256)
+2024-11-07 01:45:45,363 - ClickHouseDatabase - INFO - Вызов функции connect прошел успешно.
+2024-11-07 01:46:23,020 - ETLManager - INFO - Пользователь выбрал действие: 5
+2024-11-07 01:46:23,021 - ETLManager - WARNING - Некорректный выбор. Пожалуйста, попробуйте снова.
+2024-11-07 01:46:26,300 - ETLManager - INFO - Пользователь выбрал действие: 6
+2024-11-07 01:46:26,301 - ETLManager - WARNING - Некорректный выбор. Пожалуйста, попробуйте снова.
+2024-11-07 01:46:28,160 - ETLManager - INFO - Пользователь выбрал действие: 4
+2024-11-07 01:46:28,160 - ETLManager - INFO - Завершение программы.
+2024-11-07 01:46:28,161 - ETLManager - INFO - Закрытие соединений с базами данных.

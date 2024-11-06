@@ -1,6 +1,7 @@
 import logging
 from ClickHouseDatabase import ClickHouseDatabase
 from PostgresDatabase import PostgresDatabase
+from MySQLDatabase import MySQLDatabase
 
 # Настройка логирования
 logging.basicConfig(
@@ -26,6 +27,15 @@ class ETLManager:
         )
         self.logger.info("Попытка подключения к PostgreSQL.")
         self.pg_db.connect()
+        
+        self.my_db = MySQLDatabase(
+            host="localhost",
+            database="mysql_test",
+            user="root",
+            password="Fiksik177!"
+        )
+        self.logger.info("Попытка подключения к MySQL.")
+        self.my_db.connect()
 
         # Подключение к ClickHouse
         self.ch_db = ClickHouseDatabase(
