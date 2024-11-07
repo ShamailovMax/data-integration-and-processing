@@ -32,7 +32,8 @@ class ETLManager:
             host="localhost",
             database="mysql_test",
             user="root",
-            password="Fiksik177!"
+            password="Fiksik177!",
+            allow_local_infile=True  # Этот параметр разрешает использование LOAD DATA LOCAL INFILE
         )
         self.logger.info("Попытка подключения к MySQL.")
         self.my_db.connect()
@@ -107,6 +108,29 @@ class ETLManager:
             self.logger.info("Данные успешно перенесены из PostgreSQL в ClickHouse.")
         except Exception as e:
             self.logger.error(f"Ошибка при переносе данных из PostgreSQL в ClickHouse: {e}")
+            
+    def load_data_from_xlsx_to_mysql(self):
+        """Загрузка данных из файла xlsx в MySQL."""
+        self.logger.info("Начало загрузки данных из XLSX в MySQL.")
+        try:
+            self.my_db.process_data(
+                "C:\\prog\\wildberries_reviews.xlsx",
+                self.column_mapping,
+                table_name="wildberries_reviews"
+            )
+            self.logger.info("Данные из XLSX успешно загружены в MySQL.")
+        except Exception as e:
+            self.logger.error(f"Ошибка при загрузке данных из XLSX в MySQL: {e}")
+        # self.logger.info("Начало загрузки данных из XLSX в PostgreSQL.")
+        # try:
+        #     self.pg_db.process_data(
+        #         'wildberries_reviews.xlsx',
+        #         self.column_mapping,
+        #         table_name="test_t_re"
+        #     )
+        #     self.logger.info("Данные из XLSX успешно загружены в PostgreSQL.")
+        # except Exception as e:
+        #     self.logger.error(f"Ошибка при загрузке данных из XLSX в PostgreSQL: {e}")
 
     def show_menu(self):
         """Отображает меню для выбора действия."""
@@ -114,7 +138,8 @@ class ETLManager:
         print("1. Загрузить данные из xlsx в PostgreSQL")
         print("2. Перенести данные из ClickHouse в PostgreSQL")
         print("3. Перенести данные из PostgreSQL в ClickHouse")
-        print("4. Выйти")
+        print("4. Перенести данные из xlsx в MySQL")
+        print("0. Выйти")
 
         choice = input("Введите номер действия: ")
         self.logger.info(f"Пользователь выбрал действие: {choice}")
@@ -126,6 +151,8 @@ class ETLManager:
         elif choice == "3":
             self.transfer_data_from_postgres_to_clickhouse()
         elif choice == "4":
+            self.load_data_from_xlsx_to_mysql()
+        elif choice == "0":
             self.logger.info("Завершение программы.")
             return False
         else:
@@ -138,6 +165,7 @@ class ETLManager:
         self.logger.info("Закрытие соединений с базами данных.")
         self.pg_db.disconnect()
         self.ch_db.disconnect()
+        self.my_db.disconnect()
 
     def run(self):
         """Запускает меню и выполняет выбранные действия."""

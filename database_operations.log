@@ -41,3 +41,185 @@
 2024-11-07 01:46:28,160 - ETLManager - INFO - Пользователь выбрал действие: 4
 2024-11-07 01:46:28,160 - ETLManager - INFO - Завершение программы.
 2024-11-07 01:46:28,161 - ETLManager - INFO - Закрытие соединений с базами данных.
+2024-11-07 02:56:26,582 - ETLManager - INFO - Попытка подключения к PostgreSQL.
+2024-11-07 02:56:26,630 - PostgresDatabase - ERROR - Ошибка подключения к PostgreSQL: connection to server at "localhost" (::1), port 5432 failed: FATAL:  password authentication failed for user "postgres"
+
+2024-11-07 02:56:26,632 - PostgresDatabase - INFO - Вызов функции connect прошел успешно.
+2024-11-07 02:56:26,632 - ETLManager - INFO - Попытка подключения к MySQL.
+2024-11-07 02:56:26,679 - MySQLDatabase - INFO - Подключение к MySQL установлено.
+2024-11-07 02:56:26,679 - MySQLDatabase - INFO - Вызов функции connect прошел успешно.
+2024-11-07 02:56:26,679 - ETLManager - INFO - Попытка подключения к ClickHouse.
+2024-11-07 02:56:26,679 - ClickHouseDatabase - ERROR - Ошибка подключения к ClickHouse: 'latin-1' codec can't encode characters in position 70-75: ordinal not in range(256)
+2024-11-07 02:56:26,679 - ClickHouseDatabase - INFO - Вызов функции connect прошел успешно.
+2024-11-07 02:56:32,712 - ETLManager - INFO - Пользователь выбрал действие: 4
+2024-11-07 02:56:32,712 - ETLManager - INFO - Завершение программы.
+2024-11-07 02:56:32,712 - ETLManager - INFO - Закрытие соединений с базами данных.
+2024-11-07 03:01:36,009 - ETLManager - INFO - Попытка подключения к PostgreSQL.
+2024-11-07 03:01:36,059 - PostgresDatabase - ERROR - Ошибка подключения к PostgreSQL: connection to server at "localhost" (::1), port 5432 failed: FATAL:  password authentication failed for user "postgres"
+
+2024-11-07 03:01:36,060 - PostgresDatabase - INFO - Вызов функции connect прошел успешно.
+2024-11-07 03:01:36,061 - ETLManager - INFO - Попытка подключения к MySQL.
+2024-11-07 03:01:36,099 - MySQLDatabase - INFO - Подключение к MySQL установлено.
+2024-11-07 03:01:36,101 - MySQLDatabase - INFO - Вызов функции connect прошел успешно.
+2024-11-07 03:01:36,101 - ETLManager - INFO - Попытка подключения к ClickHouse.
+2024-11-07 03:01:36,102 - ClickHouseDatabase - ERROR - Ошибка подключения к ClickHouse: 'latin-1' codec can't encode characters in position 70-75: ordinal not in range(256)
+2024-11-07 03:01:36,104 - ClickHouseDatabase - INFO - Вызов функции connect прошел успешно.
+2024-11-07 03:01:47,907 - ETLManager - INFO - Пользователь выбрал действие: 4
+2024-11-07 03:01:47,908 - ETLManager - INFO - Завершение программы.
+2024-11-07 03:01:47,909 - ETLManager - INFO - Закрытие соединений с базами данных.
+2024-11-07 03:01:47,910 - MySQLDatabase - INFO - Соединение с MySQL закрыто.
+2024-11-07 03:03:57,418 - ETLManager - INFO - Попытка подключения к PostgreSQL.
+2024-11-07 03:03:57,463 - PostgresDatabase - ERROR - Ошибка подключения к PostgreSQL: connection to server at "localhost" (::1), port 5432 failed: FATAL:  password authentication failed for user "postgres"
+
+2024-11-07 03:03:57,464 - PostgresDatabase - INFO - Вызов функции connect прошел успешно.
+2024-11-07 03:03:57,464 - ETLManager - INFO - Попытка подключения к MySQL.
+2024-11-07 03:03:57,508 - MySQLDatabase - INFO - Подключение к MySQL установлено.
+2024-11-07 03:03:57,508 - MySQLDatabase - INFO - Вызов функции connect прошел успешно.
+2024-11-07 03:03:57,509 - ETLManager - INFO - Попытка подключения к ClickHouse.
+2024-11-07 03:03:57,511 - ClickHouseDatabase - ERROR - Ошибка подключения к ClickHouse: 'latin-1' codec can't encode characters in position 70-75: ordinal not in range(256)
+2024-11-07 03:03:57,511 - ClickHouseDatabase - INFO - Вызов функции connect прошел успешно.
+2024-11-07 03:04:14,509 - ETLManager - INFO - Пользователь выбрал действие: 0
+2024-11-07 03:04:14,509 - ETLManager - INFO - Завершение программы.
+2024-11-07 03:04:14,510 - ETLManager - INFO - Закрытие соединений с базами данных.
+2024-11-07 03:04:14,511 - MySQLDatabase - INFO - Соединение с MySQL закрыто.
+2024-11-07 03:09:17,262 - ETLManager - INFO - Попытка подключения к PostgreSQL.
+2024-11-07 03:09:17,357 - PostgresDatabase - ERROR - Ошибка подключения к PostgreSQL: connection to server at "localhost" (::1), port 5432 failed: FATAL:  password authentication failed for user "postgres"
+
+2024-11-07 03:09:17,359 - PostgresDatabase - INFO - Вызов функции connect прошел успешно.
+2024-11-07 03:09:17,360 - ETLManager - INFO - Попытка подключения к MySQL.
+2024-11-07 03:09:17,425 - MySQLDatabase - INFO - Подключение к MySQL установлено.
+2024-11-07 03:09:17,426 - MySQLDatabase - INFO - Вызов функции connect прошел успешно.
+2024-11-07 03:09:17,426 - ETLManager - INFO - Попытка подключения к ClickHouse.
+2024-11-07 03:09:17,428 - ClickHouseDatabase - ERROR - Ошибка подключения к ClickHouse: 'latin-1' codec can't encode characters in position 70-75: ordinal not in range(256)
+2024-11-07 03:09:17,429 - ClickHouseDatabase - INFO - Вызов функции connect прошел успешно.
+2024-11-07 03:09:22,770 - ETLManager - INFO - Пользователь выбрал действие: 4
+2024-11-07 03:09:22,771 - ETLManager - INFO - Начало загрузки данных из XLSX в PostgreSQL.
+2024-11-07 03:09:22,772 - MySQLDatabase - ERROR - Ошибка при обработке данных: [Errno 2] No such file or directory: 'wildberries_reviews.xlsx'
+2024-11-07 03:09:22,774 - ETLManager - INFO - Данные из XLSX успешно загружены в PostgreSQL.
+2024-11-07 03:12:20,720 - ETLManager - INFO - Пользователь выбрал действие: 0
+2024-11-07 03:12:20,720 - ETLManager - INFO - Завершение программы.
+2024-11-07 03:12:20,721 - ETLManager - INFO - Закрытие соединений с базами данных.
+2024-11-07 03:12:20,721 - MySQLDatabase - INFO - Соединение с MySQL закрыто.
+2024-11-07 03:14:03,757 - ETLManager - INFO - Попытка подключения к PostgreSQL.
+2024-11-07 03:14:03,787 - PostgresDatabase - ERROR - Ошибка подключения к PostgreSQL: connection to server at "localhost" (::1), port 5432 failed: FATAL:  password authentication failed for user "postgres"
+
+2024-11-07 03:14:03,787 - PostgresDatabase - INFO - Вызов функции connect прошел успешно.
+2024-11-07 03:14:03,787 - ETLManager - INFO - Попытка подключения к MySQL.
+2024-11-07 03:14:03,822 - MySQLDatabase - INFO - Подключение к MySQL установлено.
+2024-11-07 03:14:03,823 - MySQLDatabase - INFO - Вызов функции connect прошел успешно.
+2024-11-07 03:14:03,823 - ETLManager - INFO - Попытка подключения к ClickHouse.
+2024-11-07 03:14:03,824 - ClickHouseDatabase - ERROR - Ошибка подключения к ClickHouse: 'latin-1' codec can't encode characters in position 70-75: ordinal not in range(256)
+2024-11-07 03:14:03,824 - ClickHouseDatabase - INFO - Вызов функции connect прошел успешно.
+2024-11-07 03:14:15,596 - ETLManager - INFO - Пользователь выбрал действие: 4
+2024-11-07 03:14:15,596 - ETLManager - INFO - Начало загрузки данных из XLSX в PostgreSQL.
+2024-11-07 03:14:15,598 - MySQLDatabase - ERROR - Ошибка при обработке данных: [Errno 2] No such file or directory: 'wildberries_reviews.xlsx'
+2024-11-07 03:14:15,599 - ETLManager - INFO - Данные из XLSX успешно загружены в PostgreSQL.
+2024-11-07 03:14:20,056 - ETLManager - INFO - Пользователь выбрал действие: 0
+2024-11-07 03:14:20,057 - ETLManager - INFO - Завершение программы.
+2024-11-07 03:14:20,058 - ETLManager - INFO - Закрытие соединений с базами данных.
+2024-11-07 03:14:20,058 - MySQLDatabase - INFO - Соединение с MySQL закрыто.
+2024-11-07 03:16:27,018 - ETLManager - INFO - Попытка подключения к PostgreSQL.
+2024-11-07 03:16:27,044 - PostgresDatabase - ERROR - Ошибка подключения к PostgreSQL: connection to server at "localhost" (::1), port 5432 failed: FATAL:  password authentication failed for user "postgres"
+
+2024-11-07 03:16:27,044 - PostgresDatabase - INFO - Вызов функции connect прошел успешно.
+2024-11-07 03:16:27,044 - ETLManager - INFO - Попытка подключения к MySQL.
+2024-11-07 03:16:27,065 - MySQLDatabase - INFO - Подключение к MySQL установлено.
+2024-11-07 03:16:27,065 - MySQLDatabase - INFO - Вызов функции connect прошел успешно.
+2024-11-07 03:16:27,065 - ETLManager - INFO - Попытка подключения к ClickHouse.
+2024-11-07 03:16:27,066 - ClickHouseDatabase - ERROR - Ошибка подключения к ClickHouse: 'latin-1' codec can't encode characters in position 70-75: ordinal not in range(256)
+2024-11-07 03:16:27,066 - ClickHouseDatabase - INFO - Вызов функции connect прошел успешно.
+2024-11-07 03:16:36,921 - ETLManager - INFO - Пользователь выбрал действие: 4
+2024-11-07 03:16:36,921 - ETLManager - INFO - Начало загрузки данных из XLSX в PostgreSQL.
+2024-11-07 03:16:38,020 - MySQLDatabase - INFO - Данные успешно загружены из источника.
+2024-11-07 03:16:38,020 - MySQLDatabase - INFO - Столбцы переименованы согласно column_mapping: {'автор': 'author', 'дата': 'date', 'отзыв': 'review', 'продукт': 'product', 'артикул': 'article'}
+2024-11-07 03:16:38,036 - MySQLDatabase - ERROR - Ошибка при создании таблицы: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ', date varchar, review varchar, product decimal, article decimal)' at line 1
+2024-11-07 03:16:38,051 - MySQLDatabase - ERROR - Ошибка при загрузке данных: 'CMySQLCursor' object has no attribute 'copy_expert'
+2024-11-07 03:16:38,051 - MySQLDatabase - INFO - Временный CSV файл wildberries_reviews.csv удален.
+2024-11-07 03:16:38,051 - MySQLDatabase - INFO - Данные из источника C:\prog\wildberries_reviews.xlsx загружены в таблицу wildberries_reviews в MySQL.
+2024-11-07 03:16:38,052 - ETLManager - INFO - Данные из XLSX успешно загружены в PostgreSQL.
+2024-11-07 03:17:00,967 - ETLManager - INFO - Пользователь выбрал действие: 0
+2024-11-07 03:17:00,967 - ETLManager - INFO - Завершение программы.
+2024-11-07 03:17:00,968 - ETLManager - INFO - Закрытие соединений с базами данных.
+2024-11-07 03:17:00,969 - MySQLDatabase - INFO - Соединение с MySQL закрыто.
+2024-11-07 03:30:00,663 - ETLManager - INFO - Попытка подключения к PostgreSQL.
+2024-11-07 03:30:00,689 - PostgresDatabase - ERROR - Ошибка подключения к PostgreSQL: connection to server at "localhost" (::1), port 5432 failed: FATAL:  password authentication failed for user "postgres"
+
+2024-11-07 03:30:00,690 - PostgresDatabase - INFO - Вызов функции connect прошел успешно.
+2024-11-07 03:30:00,691 - ETLManager - INFO - Попытка подключения к MySQL.
+2024-11-07 03:30:00,712 - MySQLDatabase - INFO - Подключение к MySQL установлено.
+2024-11-07 03:30:00,712 - MySQLDatabase - INFO - Вызов функции connect прошел успешно.
+2024-11-07 03:30:00,713 - ETLManager - INFO - Попытка подключения к ClickHouse.
+2024-11-07 03:30:00,713 - ClickHouseDatabase - ERROR - Ошибка подключения к ClickHouse: 'latin-1' codec can't encode characters in position 70-75: ordinal not in range(256)
+2024-11-07 03:30:00,714 - ClickHouseDatabase - INFO - Вызов функции connect прошел успешно.
+2024-11-07 03:30:06,059 - ETLManager - INFO - Пользователь выбрал действие: 4
+2024-11-07 03:30:06,060 - ETLManager - INFO - Начало загрузки данных из XLSX в MySQL.
+2024-11-07 03:30:06,205 - MySQLDatabase - INFO - Данные успешно загружены из источника.
+2024-11-07 03:30:06,206 - MySQLDatabase - INFO - Столбцы переименованы согласно column_mapping: {'автор': 'author', 'дата': 'date', 'отзыв': 'review', 'продукт': 'product', 'артикул': 'article'}
+2024-11-07 03:30:06,220 - MySQLDatabase - ERROR - Ошибка при создании таблицы: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ', date varchar, review varchar, product decimal, article decimal)' at line 1
+2024-11-07 03:30:06,230 - MySQLDatabase - ERROR - Ошибка при загрузке данных: 3948 (42000): Loading local data is disabled; this must be enabled on both the client and server sides
+2024-11-07 03:30:06,231 - MySQLDatabase - INFO - Временный CSV файл wildberries_reviews.csv удален.
+2024-11-07 03:30:06,231 - MySQLDatabase - INFO - Данные из источника C:\prog\wildberries_reviews.xlsx загружены в таблицу wildberries_reviews в MySQL.
+2024-11-07 03:30:06,232 - ETLManager - INFO - Данные из XLSX успешно загружены в MySQL.
+2024-11-07 03:33:34,844 - ETLManager - INFO - Пользователь выбрал действие: 4
+2024-11-07 03:33:34,845 - ETLManager - INFO - Начало загрузки данных из XLSX в MySQL.
+2024-11-07 03:33:34,869 - MySQLDatabase - INFO - Данные успешно загружены из источника.
+2024-11-07 03:33:34,869 - MySQLDatabase - INFO - Столбцы переименованы согласно column_mapping: {'автор': 'author', 'дата': 'date', 'отзыв': 'review', 'продукт': 'product', 'артикул': 'article'}
+2024-11-07 03:33:34,882 - MySQLDatabase - ERROR - Ошибка при создании таблицы: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ', date varchar, review varchar, product decimal, article decimal)' at line 1
+2024-11-07 03:33:34,890 - MySQLDatabase - ERROR - Ошибка при загрузке данных: 3948 (42000): Loading local data is disabled; this must be enabled on both the client and server sides
+2024-11-07 03:33:34,892 - MySQLDatabase - INFO - Временный CSV файл wildberries_reviews.csv удален.
+2024-11-07 03:33:34,892 - MySQLDatabase - INFO - Данные из источника C:\prog\wildberries_reviews.xlsx загружены в таблицу wildberries_reviews в MySQL.
+2024-11-07 03:33:34,892 - ETLManager - INFO - Данные из XLSX успешно загружены в MySQL.
+2024-11-07 03:33:41,933 - ETLManager - INFO - Пользователь выбрал действие: 0
+2024-11-07 03:33:41,934 - ETLManager - INFO - Завершение программы.
+2024-11-07 03:33:41,934 - ETLManager - INFO - Закрытие соединений с базами данных.
+2024-11-07 03:33:41,935 - MySQLDatabase - INFO - Соединение с MySQL закрыто.
+2024-11-07 03:33:44,679 - ETLManager - INFO - Попытка подключения к PostgreSQL.
+2024-11-07 03:33:44,706 - PostgresDatabase - ERROR - Ошибка подключения к PostgreSQL: connection to server at "localhost" (::1), port 5432 failed: FATAL:  password authentication failed for user "postgres"
+
+2024-11-07 03:33:44,707 - PostgresDatabase - INFO - Вызов функции connect прошел успешно.
+2024-11-07 03:33:44,707 - ETLManager - INFO - Попытка подключения к MySQL.
+2024-11-07 03:33:44,727 - MySQLDatabase - INFO - Подключение к MySQL установлено.
+2024-11-07 03:33:44,727 - MySQLDatabase - INFO - Вызов функции connect прошел успешно.
+2024-11-07 03:33:44,727 - ETLManager - INFO - Попытка подключения к ClickHouse.
+2024-11-07 03:33:44,728 - ClickHouseDatabase - ERROR - Ошибка подключения к ClickHouse: 'latin-1' codec can't encode characters in position 70-75: ordinal not in range(256)
+2024-11-07 03:33:44,728 - ClickHouseDatabase - INFO - Вызов функции connect прошел успешно.
+2024-11-07 03:33:47,244 - ETLManager - INFO - Пользователь выбрал действие: 4
+2024-11-07 03:33:47,245 - ETLManager - INFO - Начало загрузки данных из XLSX в MySQL.
+2024-11-07 03:33:47,383 - MySQLDatabase - INFO - Данные успешно загружены из источника.
+2024-11-07 03:33:47,384 - MySQLDatabase - INFO - Столбцы переименованы согласно column_mapping: {'автор': 'author', 'дата': 'date', 'отзыв': 'review', 'продукт': 'product', 'артикул': 'article'}
+2024-11-07 03:33:47,407 - MySQLDatabase - INFO - Таблица mysql_test.wildberries_reviews создана в MySQL.
+2024-11-07 03:33:47,420 - MySQLDatabase - ERROR - Ошибка при загрузке данных: 3948 (42000): Loading local data is disabled; this must be enabled on both the client and server sides
+2024-11-07 03:33:47,421 - MySQLDatabase - INFO - Временный CSV файл wildberries_reviews.csv удален.
+2024-11-07 03:33:47,421 - MySQLDatabase - INFO - Данные из источника C:\prog\wildberries_reviews.xlsx загружены в таблицу wildberries_reviews в MySQL.
+2024-11-07 03:33:47,421 - ETLManager - INFO - Данные из XLSX успешно загружены в MySQL.
+2024-11-07 03:35:58,588 - ETLManager - INFO - Пользователь выбрал действие: 0
+2024-11-07 03:35:58,589 - ETLManager - INFO - Завершение программы.
+2024-11-07 03:35:58,590 - ETLManager - INFO - Закрытие соединений с базами данных.
+2024-11-07 03:35:58,591 - MySQLDatabase - INFO - Соединение с MySQL закрыто.
+2024-11-07 03:36:02,939 - ETLManager - INFO - Попытка подключения к PostgreSQL.
+2024-11-07 03:36:02,965 - PostgresDatabase - ERROR - Ошибка подключения к PostgreSQL: connection to server at "localhost" (::1), port 5432 failed: FATAL:  password authentication failed for user "postgres"
+
+2024-11-07 03:36:02,966 - PostgresDatabase - INFO - Вызов функции connect прошел успешно.
+2024-11-07 03:40:06,152 - ETLManager - INFO - Попытка подключения к PostgreSQL.
+2024-11-07 03:40:06,179 - PostgresDatabase - ERROR - Ошибка подключения к PostgreSQL: connection to server at "localhost" (::1), port 5432 failed: FATAL:  password authentication failed for user "postgres"
+
+2024-11-07 03:40:06,180 - PostgresDatabase - INFO - Вызов функции connect прошел успешно.
+2024-11-07 03:40:06,180 - ETLManager - INFO - Попытка подключения к MySQL.
+2024-11-07 03:40:06,200 - MySQLDatabase - INFO - Подключение к MySQL установлено.
+2024-11-07 03:40:06,201 - MySQLDatabase - INFO - Вызов функции connect прошел успешно.
+2024-11-07 03:40:06,201 - ETLManager - INFO - Попытка подключения к ClickHouse.
+2024-11-07 03:40:06,201 - ClickHouseDatabase - ERROR - Ошибка подключения к ClickHouse: 'latin-1' codec can't encode characters in position 70-75: ordinal not in range(256)
+2024-11-07 03:40:06,202 - ClickHouseDatabase - INFO - Вызов функции connect прошел успешно.
+2024-11-07 03:40:09,926 - ETLManager - INFO - Пользователь выбрал действие: 4
+2024-11-07 03:40:09,926 - ETLManager - INFO - Начало загрузки данных из XLSX в MySQL.
+2024-11-07 03:40:10,067 - MySQLDatabase - INFO - Данные успешно загружены из источника.
+2024-11-07 03:40:10,068 - MySQLDatabase - INFO - Столбцы переименованы согласно column_mapping: {'автор': 'author', 'дата': 'date', 'отзыв': 'review', 'продукт': 'product', 'артикул': 'article'}
+2024-11-07 03:40:10,086 - MySQLDatabase - INFO - Таблица mysql_test.wildberries_reviews создана в MySQL.
+2024-11-07 03:40:10,094 - MySQLDatabase - ERROR - Ошибка при загрузке данных: 3948 (42000): Loading local data is disabled; this must be enabled on both the client and server sides
+2024-11-07 03:40:10,095 - MySQLDatabase - INFO - Временный CSV файл wildberries_reviews.csv удален.
+2024-11-07 03:40:10,095 - MySQLDatabase - INFO - Данные из источника C:\prog\wildberries_reviews.xlsx загружены в таблицу wildberries_reviews в MySQL.
+2024-11-07 03:40:10,095 - ETLManager - INFO - Данные из XLSX успешно загружены в MySQL.
+2024-11-07 03:45:49,327 - ETLManager - INFO - Пользователь выбрал действие: 0
+2024-11-07 03:45:49,328 - ETLManager - INFO - Завершение программы.
+2024-11-07 03:45:49,329 - ETLManager - INFO - Закрытие соединений с базами данных.
+2024-11-07 03:45:49,330 - MySQLDatabase - INFO - Соединение с MySQL закрыто.

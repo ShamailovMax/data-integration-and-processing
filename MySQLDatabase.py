@@ -17,40 +17,25 @@ logging.basicConfig(
 )
 
 class MySQLDatabase:
-    def __init__(self, host, database, user, password):
+    def __init__(self, host, database, user, password, allow_local_infile=False):
         self.host = host
         self.database = database
         self.user = user
         self.password = password
-        # self.schema = schema
+        self.allow_local_infile=allow_local_infile
         self.conn = None
         self.logger = logging.getLogger(self.__class__.__name__)  # Создаем логгер для класса
 
     @retry(retries=3, delay=5, logger=logging.getLogger(__name__))
     def connect(self):
         """Подключается к MySQL."""
-        # try:
-        #     self.conn = mysql.connector.connect(
-        #         host=self.host,
-        #         dbname=self.database,
-        #         user=self.user,
-        #         password=self.password
-        #     )
-        #     with self.conn.cursor() as cursor:
-        #         cursor.execute(f"SET search_path TO {self.database};")
-        #     self.logger.info("Соединение с MySQL установлено.")
-        # except (Exception, mysql.connector.DatabaseError) as error:
-        #     self.logger.error(f"Ошибка подключения к MySQL: {error}")
-        #     self.conn = None
-    
-        # todo: compare connection blocks
-        
         try:
             self.conn = mysql.connector.connect(
                 user=self.user, 
                 password=self.password, 
                 host=self.host, 
-                database=self.database
+                database=self.database,
+                allow_local_infile=self.allow_local_infile
             )
             self.logger.info("Подключение к MySQL установлено.")
         except mysql.connector.Error as e:
@@ -65,20 +50,29 @@ class MySQLDatabase:
     def create_table(self, table_name, df):
         """Создает таблицу в MySQL в указанной схеме."""
         replacements = {
-            'float64': 'decimal',
-            'object': 'varchar',
-            'int64': 'int',
+            'float64': 'decimal(10, 2)',
+            'object': 'varchar(255)',
+            'int64': 'bigint',
             'int32': 'int',
             'int16': 'smallint',
-            'bool': 'boolean',
-            'datetime64[ns]': 'timestamp',
-            'timedelta64[ns]': 'varchar',
-            'string': 'varchar'
+            'bool': 'tinyint(1)',
+            'datetime64[ns]': 'datetime',
+            'timedelta64[ns]': 'varchar(50)',
+            'string': 'varchar(255)'
         }
-        col_str = ", ".join(f"{col} {replacements.get(str(dtype), 'varchar')}" 
-                            for col, dtype in zip(df.columns, df.dtypes))
+
+        col_str = []
+        for col, dtype in zip(df.columns, df.dtypes):
+            dtype_str = str(dtype)
+            if dtype_str in replacements:
+                col_type = replacements[dtype_str]
+            else:
+                col_type = 'varchar(255)'
+            col_str.append(f"{col} {col_type}")
+
+        col_str = ", ".join(col_str)
         full_table_name = f"{self.database}.{table_name}"
-        
+
         try:
             with self.conn.cursor() as cursor:
                 cursor.execute(f"DROP TABLE IF EXISTS {full_table_name};")
@@ -92,20 +86,18 @@ class MySQLDatabase:
     def load_data_to_db(self, df, table_name):
         """Загружает данные из DataFrame в MySQL."""
         temp_csv_path = f"{table_name}.csv"
-        full_table_name = f"{self.database}.{table_name}"
+        full_table_name = f"`{self.database}`.`{table_name}`"
         df.to_csv(temp_csv_path, encoding='utf-8', header=True, index=False)
         
         try:
             with open(temp_csv_path, 'r', encoding='utf-8') as my_file:
                 with self.conn.cursor() as cursor:
-                    sql_statement = f"""COPY {full_table_name} FROM STDIN WITH
-                                        CSV
-                                        ENCODING 'UTF8'
-                                        HEADER
-                                        DELIMITER AS ',';"""
-                    cursor.copy_expert(sql=sql_statement, file=my_file)
-                    cursor.execute(f"GRANT SELECT ON TABLE {full_table_name} TO PUBLIC;")
+                    sql_statement = f"""LOAD DATA LOCAL INFILE '{temp_csv_path}' INTO TABLE {full_table_name} FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;"""
+                    
+                    cursor.execute(sql_statement)
+                    cursor.execute(f"GRANT SELECT ON TABLE {full_table_name} TO 'public';")
                     self.conn.commit()
+            
             self.logger.info(f"Данные загружены в таблицу {full_table_name} в MySQL.")
         except (Exception, mysql.connector.DatabaseError) as error:
             self.logger.error(f"Ошибка при загрузке данных: {error}")
@@ -113,6 +105,9 @@ class MySQLDatabase:
         finally:
             if os.path.exists(temp_csv_path):
                 os.remove(temp_csv_path)
+                
+                # ? надо ли нам удалять временный файл? 
+                # вместе с ним удаляется и таблица в базе данных
                 self.logger.info(f"Временный CSV файл {temp_csv_path} удален.")
 
     @staticmethod
