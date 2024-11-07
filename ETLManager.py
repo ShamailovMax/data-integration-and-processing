@@ -114,7 +114,7 @@ class ETLManager:
         self.logger.info("Начало загрузки данных из XLSX в MySQL.")
         try:
             self.my_db.process_data(
-                "C:\\prog\\wildberries_reviews.xlsx",
+                "C:\\prog\\data\\imot_bg_listings.xlsx",
                 self.column_mapping,
                 table_name="wildberries_reviews"
             )

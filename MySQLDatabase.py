@@ -1,6 +1,7 @@
 import logging
 import pandas as pd
 import mysql.connector
+import csv
 
 import os
 
@@ -83,21 +84,32 @@ class MySQLDatabase:
             self.logger.error(f"Ошибка при создании таблицы: {error}")
             self.conn.rollback()
 
+    def insert_data_from_csv(self, table_name, file_path):
+        """Читает CSV-файл и вставляет данные в таблицу."""
+        cursor = self.conn.cursor()
+
+        with open(file_path, mode='r', encoding='utf-8') as file:
+            reader = csv.reader(file)
+            columns = next(reader)
+            rows = list(reader) 
+
+        placeholders = ', '.join(['%s'] * len(columns))
+        query = f"INSERT INTO {table_name} ({', '.join(columns)}) VALUES ({placeholders})"
+
+        for row in rows:
+            cursor.execute(query, tuple(row))
+
+        self.conn.commit()
+        cursor.close()
+
     def load_data_to_db(self, df, table_name):
         """Загружает данные из DataFrame в MySQL."""
         temp_csv_path = f"{table_name}.csv"
         full_table_name = f"`{self.database}`.`{table_name}`"
         df.to_csv(temp_csv_path, encoding='utf-8', header=True, index=False)
-        
+
         try:
-            with open(temp_csv_path, 'r', encoding='utf-8') as my_file:
-                with self.conn.cursor() as cursor:
-                    sql_statement = f"""LOAD DATA LOCAL INFILE '{temp_csv_path}' INTO TABLE {full_table_name} FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;"""
-                    
-                    cursor.execute(sql_statement)
-                    cursor.execute(f"GRANT SELECT ON TABLE {full_table_name} TO 'public';")
-                    self.conn.commit()
-            
+            self.insert_data_from_csv(table_name, temp_csv_path)
             self.logger.info(f"Данные загружены в таблицу {full_table_name} в MySQL.")
         except (Exception, mysql.connector.DatabaseError) as error:
             self.logger.error(f"Ошибка при загрузке данных: {error}")
@@ -105,9 +117,6 @@ class MySQLDatabase:
         finally:
             if os.path.exists(temp_csv_path):
                 os.remove(temp_csv_path)
-                
-                # ? надо ли нам удалять временный файл? 
-                # вместе с ним удаляется и таблица в базе данных
                 self.logger.info(f"Временный CSV файл {temp_csv_path} удален.")
 
     @staticmethod
