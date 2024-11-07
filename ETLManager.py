@@ -131,6 +131,9 @@ class ETLManager:
         #     self.logger.info("Данные из XLSX успешно загружены в PostgreSQL.")
         # except Exception as e:
         #     self.logger.error(f"Ошибка при загрузке данных из XLSX в PostgreSQL: {e}")
+        
+    def transfer_data_from_postgresql_to_mysql(self):
+        pass
 
     def show_menu(self):
         """Отображает меню для выбора действия."""

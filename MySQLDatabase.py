@@ -175,3 +175,6 @@ class MySQLDatabase:
         except Exception as error:
             self.logger.error(f"Ошибка при копировании данных из ClickHouse в MySQL: {error}")
             self.conn.rollback()
+            
+    def transfer_data_from_postgresql_to_mysql(self):
+        pass
